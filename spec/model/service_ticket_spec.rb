@@ -1,23 +1,21 @@
-# encoding: utf-8
-
 require 'spec_helper'
 
 describe CASino::ServiceTicket do
-  let(:unconsumed_ticket) {
+  let(:unconsumed_ticket) do
     ticket = described_class.new ticket: 'ST-12345', service: 'https://example.com/cas-service'
     ticket.ticket_granting_ticket_id = 1
     ticket
-  }
-  let(:consumed_ticket) {
+  end
+  let(:consumed_ticket) do
     ticket = described_class.new ticket: 'ST-54321', service: 'https://example.com/cas-service'
     ticket.ticket_granting_ticket_id = 1
     ticket.consumed = true
     ticket.save!
     ticket
-  }
+  end
 
   describe '#expired?' do
-    [:unconsumed, :consumed].each do |state|
+    %i[unconsumed consumed].each do |state|
       context "with an #{state} ticket" do
         let(:ticket) { send("#{state}_ticket") }
 

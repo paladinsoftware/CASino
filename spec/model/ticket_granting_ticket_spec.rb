@@ -2,15 +2,15 @@ require 'spec_helper'
 require 'useragent'
 
 describe CASino::TicketGrantingTicket do
-  let(:ticket_granting_ticket) { FactoryGirl.create :ticket_granting_ticket, user_agent: 'TestBrowser' }
-  let(:service_ticket) { FactoryGirl.create :service_ticket, ticket_granting_ticket: ticket_granting_ticket }
+  let(:ticket_granting_ticket) { FactoryBot.create :ticket_granting_ticket, user_agent: 'TestBrowser' }
+  let(:service_ticket) { FactoryBot.create :service_ticket, ticket_granting_ticket: ticket_granting_ticket }
 
   subject { ticket_granting_ticket }
 
   it_behaves_like 'has browser info'
 
   describe '#destroy' do
-    let!(:consumed_service_ticket) { FactoryGirl.create :service_ticket, :consumed, ticket_granting_ticket: ticket_granting_ticket }
+    let!(:consumed_service_ticket) { FactoryBot.create :service_ticket, :consumed, ticket_granting_ticket: ticket_granting_ticket }
 
     context 'when notification for a service ticket fails' do
       before(:each) do
@@ -32,12 +32,10 @@ describe CASino::TicketGrantingTicket do
     end
   end
 
-  describe "user_ip" do
-
+  describe 'user_ip' do
     it 'returns request remote_ip' do
       ticket_granting_ticket.user_ip.should == '127.0.0.1'
     end
-
   end
 
   describe '#same_user?' do
@@ -50,7 +48,7 @@ describe CASino::TicketGrantingTicket do
     end
 
     context 'with a ticket from another user' do
-      let(:other_ticket_granting_ticket) { FactoryGirl.create :ticket_granting_ticket  }
+      let(:other_ticket_granting_ticket) { FactoryBot.create :ticket_granting_ticket }
 
       it 'should return false' do
         ticket_granting_ticket.same_user?(other_ticket_granting_ticket).should == false
@@ -58,7 +56,7 @@ describe CASino::TicketGrantingTicket do
     end
 
     context 'with a ticket from the same user' do
-      let(:other_ticket_granting_ticket) { FactoryGirl.create :ticket_granting_ticket, user: ticket_granting_ticket.user }
+      let(:other_ticket_granting_ticket) { FactoryBot.create :ticket_granting_ticket, user: ticket_granting_ticket.user }
 
       it 'should return true' do
         ticket_granting_ticket.same_user?(other_ticket_granting_ticket).should == true
@@ -136,7 +134,7 @@ describe CASino::TicketGrantingTicket do
   end
 
   describe '.cleanup' do
-    let!(:other_ticket_granting_ticket) { FactoryGirl.create :ticket_granting_ticket }
+    let!(:other_ticket_granting_ticket) { FactoryBot.create :ticket_granting_ticket }
 
     it 'deletes expired ticket-granting tickets' do
       ticket_granting_ticket.created_at = 25.hours.ago

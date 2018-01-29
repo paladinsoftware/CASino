@@ -1,6 +1,6 @@
 require 'factory_girl'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :login_attempt, class: CASino::LoginAttempt do
     user
     successful true

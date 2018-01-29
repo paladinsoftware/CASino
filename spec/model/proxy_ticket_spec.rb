@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe CASino::ProxyTicket do
-  let(:unconsumed_ticket) {
+  let(:unconsumed_ticket) do
     ticket = described_class.new ticket: 'PT-12345', service: 'any_string_is_valid'
     ticket.proxy_granting_ticket_id = 1
     ticket
-  }
-  let(:consumed_ticket) {
+  end
+  let(:consumed_ticket) do
     ticket = described_class.new ticket: 'PT-54321', service: 'any_string_is_valid'
     ticket.proxy_granting_ticket_id = 1
     ticket.consumed = true
     ticket.save!
     ticket
-  }
+  end
 
   describe '#expired?' do
-    [:unconsumed, :consumed].each do |state|
+    %i[unconsumed consumed].each do |state|
       context "with an #{state} ticket" do
         let(:ticket) { send("#{state}_ticket") }
 

@@ -1,6 +1,6 @@
 require 'addressable/uri'
 
-class CASino::ProxyTicket < ActiveRecord::Base
+class CASino::ProxyTicket < CASino::ApplicationRecord
   include CASino::ModelConcern::Ticket
 
   self.ticket_prefix = 'PT'.freeze
@@ -10,11 +10,11 @@ class CASino::ProxyTicket < ActiveRecord::Base
   has_many :proxy_granting_tickets, as: :granter, dependent: :destroy
 
   def self.cleanup_unconsumed
-    self.destroy_all(['created_at < ? AND consumed = ?', CASino.config.proxy_ticket[:lifetime_unconsumed].seconds.ago, false])
+    where(['created_at < ? AND consumed = ?', CASino.config.proxy_ticket[:lifetime_unconsumed].seconds.ago, false]).destroy_all
   end
 
   def self.cleanup_consumed
-    self.destroy_all(['created_at < ? AND consumed = ?', CASino.config.proxy_ticket[:lifetime_consumed].seconds.ago, true])
+    where(['created_at < ? AND consumed = ?', CASino.config.proxy_ticket[:lifetime_consumed].seconds.ago, true]).destroy_all
   end
 
   def expired?

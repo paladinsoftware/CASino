@@ -1,4 +1,4 @@
-class RenameBaseModels < ActiveRecord::Migration
+class RenameBaseModels < ActiveRecord::Migration[4.1]
   def up
     # Login Tickets
     rename_table :login_tickets, :casino_login_tickets

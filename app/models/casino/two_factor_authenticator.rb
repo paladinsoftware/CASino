@@ -1,11 +1,11 @@
 
-class CASino::TwoFactorAuthenticator < ActiveRecord::Base
+class CASino::TwoFactorAuthenticator < CASino::ApplicationRecord
   belongs_to :user
 
   scope :active, -> { where(active: true) }
 
   def self.cleanup
-    self.delete_all(['(created_at < ?) AND active = ?', self.lifetime.ago, false])
+    where(['(created_at < ?) AND active = ?', lifetime.ago, false]).delete_all
   end
 
   def self.lifetime
@@ -13,6 +13,6 @@ class CASino::TwoFactorAuthenticator < ActiveRecord::Base
   end
 
   def expired?
-    !self.active? && (Time.now - (self.created_at || Time.now)) > self.class.lifetime
+    !active? && (Time.now - (created_at || Time.now)) > self.class.lifetime
   end
 end

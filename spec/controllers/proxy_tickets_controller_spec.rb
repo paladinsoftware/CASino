@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe CASino::ProxyTicketsController do
-  let(:request_options) { params.merge(use_route: :casino) }
+  routes { CASino::Engine.routes }
+
+  let(:request_options) { {params: params} }
 
   describe 'GET "proxyValidate"' do
-    let(:proxy_ticket) { FactoryGirl.create :proxy_ticket }
+    let(:proxy_ticket) { FactoryBot.create :proxy_ticket }
     let(:service) { proxy_ticket.service }
     let(:parameters) { { service: service, ticket: proxy_ticket.ticket }}
     let(:params) { parameters }
@@ -17,12 +19,12 @@ describe CASino::ProxyTicketsController do
       let(:regex_proxy) { /<cas:proxies>\s*<cas:proxy>#{proxy_ticket.proxy_granting_ticket.pgt_url}<\/cas:proxy>\s*<\/cas:proxies>/ }
 
       it 'answers with the success text' do
-        get :proxy_validate, request_options
+        get :proxy_validate, **request_options
         response.body.should =~ regex_success
       end
 
       it 'includes the proxy in the response' do
-        get :proxy_validate, request_options
+        get :proxy_validate, **request_options
         response.body.should =~ regex_proxy
       end
 
@@ -32,7 +34,7 @@ describe CASino::ProxyTicketsController do
         end
 
         it 'answers with the failure text' do
-          get :proxy_validate, request_options
+          get :proxy_validate, **request_options
           response.body.should =~ regex_failure
         end
       end
@@ -41,7 +43,7 @@ describe CASino::ProxyTicketsController do
         let(:params) { parameters.merge(service: 'this_is_another_service') }
 
         it 'answers with the failure text' do
-          get :proxy_validate, request_options
+          get :proxy_validate, **request_options
           response.body.should =~ regex_failure
         end
       end
@@ -50,7 +52,7 @@ describe CASino::ProxyTicketsController do
         let(:params) { { ticket: 'PT-1234', service: 'https://www.example.com/' } }
 
         it 'answers with the failure text' do
-          get :proxy_validate, request_options
+          get :proxy_validate, **request_options
           response.body.should =~ regex_failure
         end
       end
@@ -65,13 +67,13 @@ describe CASino::ProxyTicketsController do
 
     context 'without proxy-granting ticket' do
       it 'answers with the failure text' do
-        get :create, request_options
+        get :create, **request_options
         response.body.should =~ regex_failure
       end
 
       it 'does not create a proxy ticket' do
         lambda do
-          get :create, request_options
+          get :create, **request_options
         end.should_not change(CASino::ProxyTicket, :count)
       end
     end
@@ -80,34 +82,34 @@ describe CASino::ProxyTicketsController do
       let(:params) { parameters.merge(pgt: 'PGT-123453789') }
 
       it 'answers with the failure text' do
-        get :create, request_options
+        get :create, **request_options
         response.body.should =~ regex_failure
       end
 
       it 'does not create a proxy ticket' do
         lambda do
-          get :create, request_options
+          get :create, **request_options
         end.should_not change(CASino::ProxyTicket, :count)
       end
     end
 
     context 'with a proxy-granting ticket' do
-      let(:proxy_granting_ticket) { FactoryGirl.create :proxy_granting_ticket }
+      let(:proxy_granting_ticket) { FactoryBot.create :proxy_granting_ticket }
       let(:params) { parameters.merge(pgt: proxy_granting_ticket.ticket) }
 
       it 'answers with the success text' do
-        get :create, request_options
+        get :create, **request_options
         response.body.should =~ regex_success
       end
 
       it 'does create a proxy ticket' do
         lambda do
-          get :create, request_options
+          get :create, **request_options
         end.should change(proxy_granting_ticket.proxy_tickets, :count).by(1)
       end
 
       it 'includes the proxy ticket in the response' do
-        get :create, request_options
+        get :create, **request_options
         proxy_ticket = CASino::ProxyTicket.last
         response.body.should =~ /<cas:proxyTicket>#{proxy_ticket.ticket}<\/cas:proxyTicket>/
       end
@@ -116,13 +118,13 @@ describe CASino::ProxyTicketsController do
         let(:params) { parameters.merge(pgt: proxy_granting_ticket.ticket, targetService: nil) }
 
         it 'answers with the failure text' do
-          get :create, request_options
+          get :create, **request_options
           response.body.should =~ regex_failure
         end
 
         it 'does not create a proxy ticket' do
           lambda do
-            get :create, request_options
+            get :create, **request_options
           end.should_not change(CASino::ProxyTicket, :count)
         end
       end

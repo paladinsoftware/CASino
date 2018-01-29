@@ -7,7 +7,7 @@ module CASino::ControllerConcern::TicketValidator
     validation_result = validate_ticket_for_service(ticket, params[:service], renew: params[:renew])
     if validation_result.success?
       options = { ticket: ticket }
-      options[:proxy_granting_ticket] = acquire_proxy_granting_ticket(params[:pgtUrl], ticket) unless params[:pgtUrl].nil?
+      options[:proxy_granting_ticket] = acquire_proxy_granting_ticket(params[:pgtUrl], ticket) if params[:pgtUrl].present?
       build_ticket_validation_response(true, options)
     else
       build_ticket_validation_response(false,
@@ -21,7 +21,7 @@ module CASino::ControllerConcern::TicketValidator
   end
 
   def ensure_service_ticket_parameters_present
-    if params[:ticket].nil? || params[:service].nil?
+    if params[:ticket].blank? || params[:service].blank?
       build_ticket_validation_response(false,
                                        error_code: 'INVALID_REQUEST',
                                        error_message: '"ticket" and "service" parameters are both required')

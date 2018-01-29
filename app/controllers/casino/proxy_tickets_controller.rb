@@ -31,7 +31,7 @@ class CASino::ProxyTicketsController < CASino::ApplicationController
   end
 
   def ensure_proxy_parameters_present
-    if params[:pgt].nil? || params[:targetService].nil?
+    if params[:pgt].blank? || params[:targetService].blank?
       build_proxy_response(false,
                            error_code: 'INVALID_REQUEST',
                            error_message: '"pgt" and "targetService" parameters are both required')

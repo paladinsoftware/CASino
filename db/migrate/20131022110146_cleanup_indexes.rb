@@ -1,4 +1,4 @@
-class CleanupIndexes < ActiveRecord::Migration
+class CleanupIndexes < ActiveRecord::Migration[4.1]
   def change
     # delete some leftovers in migrated CASino 1.x installations
     remove_deprecated_index_if_exists :login_tickets, [:ticket]

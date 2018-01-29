@@ -1,5 +1,5 @@
 
-class CASino::User < ActiveRecord::Base
+class CASino::User < CASino::ApplicationRecord
   serialize :extra_attributes, Hash
 
   has_many :ticket_granting_tickets, dependent: :destroy

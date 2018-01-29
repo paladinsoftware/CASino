@@ -9,11 +9,11 @@ RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
     mocks.yield_receiver_to_any_instance_implementation_blocks = false
     # TODO: we should maybe port existing tests to the new expect syntax
-    mocks.syntax = [:should, :expect]
+    mocks.syntax = %i[should expect]
   end
 
   config.expect_with :rspec do |c|
     # TODO: we should maybe port existing tests to the new expect syntax
-    c.syntax = [:should, :expect]
+    c.syntax = %i[should expect]
   end
 end

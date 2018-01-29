@@ -1,4 +1,4 @@
-class FixLongIndexNames < ActiveRecord::Migration
+class FixLongIndexNames < ActiveRecord::Migration[4.1]
   def change
     # Long names prevent us from doing some migrations, because the resulting
     # temporary index names would be longer than 64 characters:

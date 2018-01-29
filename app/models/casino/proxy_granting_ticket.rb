@@ -1,5 +1,5 @@
 
-class CASino::ProxyGrantingTicket < ActiveRecord::Base
+class CASino::ProxyGrantingTicket < CASino::ApplicationRecord
   include CASino::ModelConcern::Ticket
 
   self.ticket_prefix = 'PGT'.freeze

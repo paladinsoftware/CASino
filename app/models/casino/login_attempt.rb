@@ -1,4 +1,4 @@
-class CASino::LoginAttempt < ActiveRecord::Base
+class CASino::LoginAttempt < CASino::ApplicationRecord
   include CASino::ModelConcern::BrowserInfo
 
   belongs_to :user

@@ -16,12 +16,12 @@ class CASino::SessionsController < CASino::ApplicationController
 
   def new
     tgt = current_ticket_granting_ticket
-    return handle_signed_in(tgt) unless params[:renew] || tgt.nil?
-    redirect_to(params[:service]) if params[:gateway] && params[:service].present?
+    return handle_signed_in(tgt) unless params[:renew].present? || tgt.nil?
+    redirect_to(params[:service]) if params[:gateway].present? && params[:service].present?
   end
 
   def create
-    validation_result = validate_login_credentials(params[:username], params[:password])
+    validation_result = validate_login_credentials(params[:username], params[:password], current_authenticator_context)
     if !validation_result
       log_failed_login params[:username]
       show_login_error I18n.t('login_credential_acceptor.invalid_login_credentials')
@@ -41,7 +41,7 @@ class CASino::SessionsController < CASino::ApplicationController
       .ticket_granting_tickets
       .where('id != ?', current_ticket_granting_ticket.id)
       .destroy_all if signed_in?
-    redirect_to params[:service] || sessions_path
+    redirect_to params[:service].present? ? params[:service] : sessions_path
   end
 
   def logout

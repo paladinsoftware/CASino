@@ -8,6 +8,17 @@ It currently supports [CAS 1.0 and CAS 2.0](http://apereo.github.io/cas) as well
 
 Please check our [documentation](http://casino.rbcas.com/) for setup and configuration instructions.
 
+## Test Suite
+
+Run the RSpec test suite by installing the `appraisal` gem and dependencies:
+
+    $ gem install appraisal
+    $ appraisal install
+
+And then running tests using `appraisal`:
+
+    $ appraisal rake
+
 ## License
 
 CASino is released under the [MIT License](http://www.opensource.org/licenses/MIT). See LICENSE.txt for further details.

@@ -17,7 +17,7 @@ describe CASino::LoginTicket do
   describe '#to_s' do
     it 'returns the ticket identifier' do
       ticket = described_class.new ticket: 'LT-12345'
-      "#{ticket}".should == ticket.ticket
+      ticket.to_s.should == ticket.ticket
     end
   end
 end

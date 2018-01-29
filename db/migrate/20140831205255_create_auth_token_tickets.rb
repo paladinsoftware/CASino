@@ -1,4 +1,4 @@
-class CreateAuthTokenTickets < ActiveRecord::Migration
+class CreateAuthTokenTickets < ActiveRecord::Migration[4.1]
   def change
     create_table :casino_auth_token_tickets do |t|
       t.string :ticket, :null => false

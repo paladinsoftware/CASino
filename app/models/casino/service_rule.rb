@@ -1,5 +1,5 @@
 
-class CASino::ServiceRule < ActiveRecord::Base
+class CASino::ServiceRule < CASino::ApplicationRecord
   validates :name, presence: true
   validates :url, uniqueness: true, presence: true
 

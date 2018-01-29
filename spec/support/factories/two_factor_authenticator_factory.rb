@@ -1,7 +1,7 @@
 require 'factory_girl'
 require 'rotp'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :two_factor_authenticator, class: CASino::TwoFactorAuthenticator do
     user
     secret do

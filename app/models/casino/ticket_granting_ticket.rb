@@ -1,6 +1,6 @@
 require 'user_agent'
 
-class CASino::TicketGrantingTicket < ActiveRecord::Base
+class CASino::TicketGrantingTicket < CASino::ApplicationRecord
   include CASino::ModelConcern::Ticket
   include CASino::ModelConcern::BrowserInfo
 
