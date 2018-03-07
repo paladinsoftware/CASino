@@ -23,10 +23,6 @@ module CASino::SessionsHelper
     tgt.user
   end
 
-  def current_authenticator_context
-    CASino.config.authenticator_context_builder.call(params, request)
-  end
-
   def ensure_signed_in
     redirect_to login_path unless signed_in?
   end
@@ -69,10 +65,17 @@ module CASino::SessionsHelper
 
   private
 
+  private
+
   def handle_signed_in(tgt, options = {})
     if tgt.awaiting_two_factor_authentication?
       @ticket_granting_ticket = tgt
       render 'casino/sessions/validate_otp'
+    elsif tgt.user.active_two_factor_authenticator.nil?
+      @ticket_granting_ticket = tgt
+      @two_factor_authenticator = current_user.two_factor_authenticators.create! secret: ROTP::Base32.random_base32
+
+      render 'casino/two_factor_authenticators/new'
     else
       if params[:service].present?
         begin
@@ -87,12 +90,12 @@ module CASino::SessionsHelper
   end
 
   def handle_signed_in_with_service(tgt, options)
-    if service_allowed?(params[:service])
-      url = acquire_service_ticket(tgt, params[:service], options).service_with_ticket_url
-      redirect_to url, status: :see_other
-    else
+    if !service_allowed?(params[:service])
       @service = params[:service]
       render 'casino/sessions/service_not_allowed', status: 403
+    else
+      url = acquire_service_ticket(tgt, params[:service], options).service_with_ticket_url
+      redirect_to url, status: :see_other
     end
   end
 end

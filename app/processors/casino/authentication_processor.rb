@@ -3,17 +3,11 @@ require 'casino/authenticator'
 module CASino::AuthenticationProcessor
   extend ActiveSupport::Concern
 
-  def validate_login_credentials(username, password, context = nil)
+  def validate_login_credentials(username, password, service)
     authentication_result = nil
     authenticators.each do |authenticator_name, authenticator|
       begin
-        credentials = [ username, password, context ]
-
-        # Old authenticators that don't accept a 3rd context parameter will have a validate
-        # method that only accepts 2 arguments, so check for that.
-        credentials.pop if authenticator.class.instance_method(:validate).arity == 2
-
-        data = authenticator.validate(*credentials)
+        data = authenticator.validate(username, password, service)
       rescue CASino::Authenticator::AuthenticatorError => e
         Rails.logger.error "Authenticator '#{authenticator_name}' (#{authenticator.class}) raised an error: #{e}"
       end
