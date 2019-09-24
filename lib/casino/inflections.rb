@@ -3,4 +3,5 @@
 # Railtie. Without this definition, the Railtie would use 'ca_s_ino'
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym 'CASino'
+  inflect.acronym 'API'
 end
