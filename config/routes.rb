@@ -1,5 +1,5 @@
 CASino::Engine.routes.draw do
-  mount CASino::API => '/api'
+  mount CASino::Api => '/api'
 
   resources :sessions, only: [:index, :destroy]
   resources :two_factor_authenticators, only: [:new, :create, :destroy]
