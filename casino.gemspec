@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'faraday', '~> 0.15.4'
   s.add_runtime_dependency 'grape', '>= 0.8'
   s.add_runtime_dependency 'grape-entity', '>= 0.4'
-  s.add_runtime_dependency 'kaminari', '~> 0.16'
+  s.add_runtime_dependency 'kaminari', '>= 1.2.1'
   s.add_runtime_dependency 'rails', '>= 4.2'
   s.add_runtime_dependency 'rotp', '>= 2.0'
   s.add_runtime_dependency 'rqrcode', '~> 0.10.1'
