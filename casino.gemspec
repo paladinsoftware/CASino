@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   end
 
   s.add_runtime_dependency 'addressable', '>= 2.3'
-  s.add_runtime_dependency 'faraday', '~> 0.15.4'
+  s.add_runtime_dependency 'faraday', '>= 0.15.4'
   s.add_runtime_dependency 'grape', '>= 0.8'
   s.add_runtime_dependency 'grape-entity', '>= 0.4'
   s.add_runtime_dependency 'kaminari', '>= 1.2.1'
