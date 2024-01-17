@@ -17,7 +17,10 @@ class CASino::SessionsController < CASino::ApplicationController
   def new
     tgt = current_ticket_granting_ticket
     return handle_signed_in(tgt) unless params[:renew].present? || tgt.nil?
-    redirect_to(params[:service]) if params[:gateway].present? && params[:service].present?
+    return redirect_to(params[:service]) if params[:gateway].present? && params[:service].present?
+    return head :unauthorized if request.xhr?
+
+    render 'sessions/new' # render login page if none of the above
   end
 
   def create
