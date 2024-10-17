@@ -1,6 +1,6 @@
 
 class CASino::User < CASino::ApplicationRecord
-  serialize :extra_attributes, Hash
+  serialize :extra_attributes, coder: YAML, type: Hash
 
   has_many :ticket_granting_tickets, dependent: :destroy
   has_many :two_factor_authenticators, dependent: :destroy
